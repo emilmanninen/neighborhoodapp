@@ -27,3 +27,6 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# claude code local (machine-specific) settings
+.claude/settings.local.json
