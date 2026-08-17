@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { MagnifyingGlassIcon, PlusIcon } from '@phosphor-icons/react/dist/ssr'
 import { supabase } from '@/lib/supabaseClient'
 import { Input } from '@/components/ui/input'
@@ -21,7 +21,29 @@ export default function AppHeader({
   onSearchChange?: (val: string) => void
 }) {
   const pathname = usePathname()
+  const router = useRouter()
   const [initial, setInitial] = useState('?')
+
+  // On the home page, search filters live and the caller owns the value via
+  // `search`/`onSearchChange`. Everywhere else there's nothing to filter
+  // in-page, so the box tracks its own text until it's submitted.
+  const isControlled = onSearchChange !== undefined
+  const [localSearch, setLocalSearch] = useState('')
+  const searchValue = isControlled ? (search ?? '') : localSearch
+
+  function handleSearchChange(value: string) {
+    if (isControlled) {
+      onSearchChange?.(value)
+    } else {
+      setLocalSearch(value)
+    }
+  }
+
+  function submitSearch() {
+    if (pathname === '/') return
+    const query = searchValue.trim()
+    router.push(query ? `/?q=${encodeURIComponent(query)}` : '/')
+  }
 
   useEffect(() => {
     async function loadResident() {
@@ -62,22 +84,27 @@ export default function AppHeader({
           })}
         </div>
 
-        {onSearchChange !== undefined && (
-          <div className="relative flex-1">
-            <MagnifyingGlassIcon
-              size={16}
-              className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-ink/50"
-            />
-            <Input
-              type="text"
-              aria-label="Search listings"
-              placeholder="Search for a drill, ladder, tent..."
-              value={search}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="h-10 rounded-md border-ink pl-9"
-            />
-          </div>
-        )}
+        <div className="relative flex-1">
+          <button
+            type="button"
+            onClick={submitSearch}
+            aria-label="Search"
+            className="absolute top-1/2 left-3.5 -translate-y-1/2 cursor-pointer text-ink/50 hover:text-ink"
+          >
+            <MagnifyingGlassIcon size={16} />
+          </button>
+          <Input
+            type="text"
+            aria-label="Search listings"
+            placeholder="Search for a drill, ladder, tent..."
+            value={searchValue}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') submitSearch()
+            }}
+            className="h-10 rounded-md border-ink pl-9"
+          />
+        </div>
 
         <div className="flex shrink-0 items-center gap-4">
           <Link

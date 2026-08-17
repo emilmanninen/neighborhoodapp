@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import AppHeader from '@/components/AppHeader'
@@ -9,11 +9,16 @@ import ItemCard, { Item } from '@/components/ItemCard'
 import { filterItems } from '@/lib/filterItems'
 import { CATEGORIES } from '@/lib/categories'
 
-export default function HomePage() {
+export default function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>
+}) {
+  const { q } = use(searchParams)
   const [checkingAuth, setCheckingAuth] = useState(true)
   const [items, setItems] = useState<Item[]>([])
   const [loadingItems, setLoadingItems] = useState(true)
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(q ?? '')
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const router = useRouter()
 
