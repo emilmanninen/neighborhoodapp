@@ -19,6 +19,7 @@
 
   --shadow-modal: 0 20px 48px rgba(32, 21, 21, 0.18);
   --shadow-toast: 0 8px 24px rgba(32, 21, 21, 0.14);
+  --shadow-header: 0 2px 4px rgba(32, 21, 21, 0.2);
 
   /* shadcn-style semantic aliases so the generated ui/ components pick up the brand */
   --background: var(--canvas);

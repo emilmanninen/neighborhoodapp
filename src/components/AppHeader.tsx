@@ -61,7 +61,7 @@ export default function AppHeader({
   }, [])
 
   return (
-    <div className="sticky top-0 z-20 w-full border-b border-border-soft bg-canvas px-8 py-3.5">
+    <div className="sticky top-0 z-20 w-full border-b border-border-soft bg-canvas px-8 py-3.5 shadow-[var(--shadow-header)]">
       <div className="mx-auto flex max-w-7xl items-center gap-7">
         <Link href="/" className="shrink-0 text-xl font-semibold tracking-tight text-ink">
           ToolShare
