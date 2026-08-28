@@ -2,7 +2,7 @@
 
 A neighborhood tool-sharing marketplace — residents list tools and equipment they're willing to lend, browse what's available from neighbors, and message each other to arrange borrowing. Built as an alternative to coordinating this over Facebook groups.
 
-**Live demo:** https://neighborhoodapp-xi.vercel.app/
+**Live demo:** https://toolshare.emilmanninen.com/
 
 ## Try it out
 
